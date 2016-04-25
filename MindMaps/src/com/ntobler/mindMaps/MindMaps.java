@@ -25,6 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.ntobler.mindMaps.tool.ToolHandler;
+
 public class MindMaps {
 
 	
@@ -32,7 +34,8 @@ public class MindMaps {
 		
 	
 	private static Workspace workspace;
-	private static EntryPlacer entryPlacer;
+	private static ToolHandler toolHandler;
+	
 	private static RenderTransformer transformer;
 	private static Render displayRender;
 	private static Render printRender;
@@ -82,7 +85,7 @@ public class MindMaps {
         textField = new JTextField();
         textField.setText("hellol");
         
-        textField.addKeyListener(new KeyAdapter()
+        /*textField.addKeyListener(new KeyAdapter()
         {
             public void keyPressed(KeyEvent e)
             {
@@ -91,22 +94,15 @@ public class MindMaps {
                 	entryPlacer.setText(textField.getText());
                 }
             }
-        });
+        });*/
         textField.requestFocus();
         panel.add(textField);
         
 		gui.add(panel);
 		
 		workspace = new Workspace(transformer);
-		entryPlacer = new EntryPlacer(workspace);
-		entryPlacer.setListener(new EntryPlacer.Listener() {
-			
-			@Override
-			public void onSubmited() {
-				textField.setText("");
-				
-			}
-		});
+		toolHandler = new ToolHandler();
+		
 		displayRender.addPaintable(workspace);
 		printRender.addPaintable(workspace);
 		
@@ -133,7 +129,7 @@ public class MindMaps {
 		onSomethingChanged();
 	}
 	
-	private static void onSomethingChanged() {
+	public static void onSomethingChanged() {
 		
 		transformer.setScreenDimension(display.getSize());
         display.revalidate();
@@ -214,21 +210,7 @@ public class MindMaps {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 
-				File file = new File("save.mmp");
-				
-				switch (arg0.getKeyCode()) {
-					case KeyEvent.VK_A:
-					/*Point p = MouseInfo.getPointerInfo().getLocation();
-					Complex screenPos = new Complex(p.getY(), p.getY());
-					Complex pos = new Complex(transformer.getGamePos(screenPos));
-					*/
-					//entryPlacer.pickParent();
-						
-
-					break;
-				default:
-					break;
-				}
+				toolHandler.keyPressed(arg0);
 			}
 
 			@Override
@@ -240,22 +222,6 @@ public class MindMaps {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-		display.addMouseMotionListener(new MouseMotionListener() {
-
-
-			@Override
-			public void mouseDragged(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent arg0) {
 				
 			}
 			
@@ -280,13 +246,15 @@ public class MindMaps {
 				Complex pos = new Complex(transformer.getGamePos(screenPos));
 				Point2D pick = new Point2D.Double(pos.x, pos.y);
 				
+				toolHandler.pick(pick, arg0, workspace);
+				
 				if (arg0.isShiftDown()) {
 					printArea.setOrigin(pick);
 				}
 				else if (arg0.isAltDown()) {
 					printArea.setDest(pick);
 				}
-				else if (arg0.isControlDown()) {
+				/*else if (arg0.isControlDown()) {
 					Item i = workspace.getPickedItem(pick);
 					if (i != null) {
 						entryPlacer.setParent((Entry)i);
@@ -294,7 +262,7 @@ public class MindMaps {
 				}
 				else {
 					entryPlacer.pick(pos);
-				}
+				}*/
 				onSomethingChanged();
 				
 			}

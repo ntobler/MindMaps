@@ -2,6 +2,7 @@ package com.ntobler.mindMaps;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Entry extends Item {
 
 	private String text;
 	
+	private Entry parent;
 	private List<Entry> subEntries;
 	
 	private Rectangle2D bounds;
@@ -24,6 +26,10 @@ public class Entry extends Item {
 		this.text = text;
 	}
 	
+	public String getText() {
+		return text;
+	}
+
 	public void addSubEntry (Entry subEntry) {
 		
 		if (subEntries == null) {
@@ -60,11 +66,11 @@ public class Entry extends Item {
 	
 	private void drawConnection(Graphics2D g2, Entry destEntry) {
 		
-		Complex thisPos = this.getPos();
-		Complex destPos = destEntry.getPos();
+		Point2D thisPos = this.getPos();
+		Point2D destPos = destEntry.getPos();
 		
 		g2.setPaint(Color.BLACK);
-	    g2.drawLine((int)thisPos.x, (int)thisPos.y, (int)destPos.x, (int)destPos.y);
+	    g2.drawLine((int)thisPos.getX(), (int)thisPos.getY(), (int)destPos.getX(), (int)destPos.getY());
 		
 	}
 	
@@ -86,7 +92,7 @@ public class Entry extends Item {
 	    double recWidth = width + 20;
 	    
 	    Rectangle2D rect = new Rectangle2D.Double(-recWidth / 2, -ascent - 5, recWidth, ascent + descent + 10);
-	    bounds = new Rectangle2D.Double(getPos().x - (recWidth / 2), getPos().y - ascent - 5, recWidth, ascent + descent + 10);
+	    bounds = new Rectangle2D.Double(getPos().getX() - (recWidth / 2), getPos().getY() - ascent - 5, recWidth, ascent + descent + 10);
 	    
 	    g2.setPaint(Color.WHITE);
 	    
@@ -103,5 +109,13 @@ public class Entry extends Item {
 	@Override
 	public Rectangle2D getBounds() {
 		return bounds;
+	}
+
+	public Entry getParent() {
+		return parent;
+	}
+
+	public void setParent(Entry parent) {
+		this.parent = parent;
 	}
 }

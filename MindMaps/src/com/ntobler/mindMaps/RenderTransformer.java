@@ -33,8 +33,11 @@ public class RenderTransformer {
 	
 		Complex transformVector;
 		
+		Complex focusPos;
+		
 		if (focus != null) {
-			transformVector = centerVector.minus(focus.getPos().scalarMultiply(zoom));
+			focusPos = new Complex(focus.getPos());
+			transformVector = centerVector.minus(focusPos.scalarMultiply(zoom));
 		}
 		else {
 			transformVector = centerVector;

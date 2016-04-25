@@ -50,7 +50,7 @@ public class EntryPlacer {
 	
 	private void add(Complex pos) {
 		Entry e = new Entry();
-		e.setPos(pos);
+		//e.setPos(pos);
 		e.setText(text);
 		
 		if (parent != null) {

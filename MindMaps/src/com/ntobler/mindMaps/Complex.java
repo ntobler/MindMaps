@@ -1,5 +1,6 @@
 package com.ntobler.mindMaps;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 public class Complex implements Serializable{
@@ -12,6 +13,11 @@ public class Complex implements Serializable{
 	public Complex (double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Complex (Point2D point) {
+		this.x = point.getX();
+		this.y = point.getY();
 	}
 	
 	public Complex (Complex c) {
