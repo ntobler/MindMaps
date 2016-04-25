@@ -1,22 +1,24 @@
 package com.ntobler.mindMaps;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.JPanel;
+public class Render {
 
-public class Render extends JPanel {
-
-	private ArrayList<Paintable> paintables;
+	private List<Paintable> paintables;
+	private List<DrawingLayer> drawingLayers;
+	
 	
 	public Render() {
 		
 		paintables = new ArrayList<Paintable>();
-		
+		drawingLayers = new ArrayList<DrawingLayer>();
+	}
+	
+	public void addDrawingLayer(DrawingLayer layer) {
+		drawingLayers.add(layer);
 	}
 	
 	public void addPaintable(Paintable p) {
@@ -27,34 +29,15 @@ public class Render extends JPanel {
 		paintables.remove(p);
 	}
 	
-	@Override
-    public Dimension getPreferredSize() {
-        return new Dimension(800,1000);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paint(Graphics2D g2) {
         
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        g.setColor(Color.BLACK);
-        
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        
-        for (Paintable p: paintables) {
-        	
-        	p.paint(g2);
+    	for(DrawingLayer layer: drawingLayers) {
+	        for (Paintable p: paintables) {
+	        	
+	        	p.paint(g2, layer);
+	        }
         }
-        
-        g2.dispose();
+
     }
 
-	@Override
-	public void setSize(Dimension size) {
-    	
-    }
-	
 }

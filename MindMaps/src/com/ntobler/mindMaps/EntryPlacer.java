@@ -15,6 +15,12 @@ public class EntryPlacer {
 		ADDING
 	};
 	
+	public interface Listener {
+		public void onSubmited();
+	}
+	
+	private Listener listener;
+	
 	private PickingMode pickingMode;
 	
 	public EntryPlacer(Workspace workspace) {
@@ -23,7 +29,9 @@ public class EntryPlacer {
 		pickingMode = PickingMode.ADDING;
 	}
 
-
+	
+	
+	
 	public void pick(Complex pos) {
 		switch (pickingMode) {
 		case IDLE:
@@ -48,6 +56,7 @@ public class EntryPlacer {
 		if (parent != null) {
 			parent.addSubEntry(e);
 		}
+		listener.onSubmited();
 		workspace.addItem(e);
 	}
 	
@@ -82,8 +91,8 @@ public class EntryPlacer {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
-	
-	
-	
+
+	public void setListener(Listener listener) {
+		this.listener = listener;
+	}
 }

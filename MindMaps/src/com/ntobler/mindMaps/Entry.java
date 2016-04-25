@@ -2,6 +2,8 @@ package com.ntobler.mindMaps;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +11,9 @@ public class Entry extends Item {
 
 	private String text;
 	
-	//private Entry parentEntry;
 	private List<Entry> subEntries;
+	
+	private Rectangle2D bounds;
 	
 	public Entry() {
 		super();
@@ -33,22 +36,25 @@ public class Entry extends Item {
 	
 	
 	@Override
-	public void paintAbsolute(Graphics2D g2) {
-		super.paintAbsolute(g2);
+	public void paintAbsolute(Graphics2D g2, DrawingLayer layer) {
+		super.paintAbsolute(g2, layer);
 		
-		if (subEntries != null) {
-			for (Entry subEntry: subEntries) {
-				drawConnection(g2, subEntry);
+		if (layer.equals(DrawingLayer.CONNECTIONS)) {
+			if (subEntries != null) {
+				for (Entry subEntry: subEntries) {
+					drawConnection(g2, subEntry);
+				}
 			}
 		}
-		
 	}
 
 	@Override
-	protected void paintTranslated(Graphics2D g2) {
-		super.paintTranslated(g2);
+	protected void paintTranslated(Graphics2D g2, DrawingLayer layer) {
+		super.paintTranslated(g2, layer);
 		
-		drawEntry(g2);
+		if (layer.equals(DrawingLayer.ITEMS)) {
+			drawEntry(g2);
+		}
 		
 	}
 	
@@ -57,6 +63,7 @@ public class Entry extends Item {
 		Complex thisPos = this.getPos();
 		Complex destPos = destEntry.getPos();
 		
+		g2.setPaint(Color.BLACK);
 	    g2.drawLine((int)thisPos.x, (int)thisPos.y, (int)destPos.x, (int)destPos.y);
 		
 	}
@@ -65,8 +72,6 @@ public class Entry extends Item {
 		
 		g2.setFont(Workspace.NORMAL_FONT);
 
-		g2.setPaint(Color.BLACK);
-		
 		FontMetrics metrics = g2.getFontMetrics(g2.getFont());
 		
 		double ascent = metrics.getAscent();
@@ -78,11 +83,14 @@ public class Entry extends Item {
 		else {
 			width = 0;
 		}
-	    double recWidth = width + 10;
+	    double recWidth = width + 20;
 	    
-	    g2.setPaint(Color.GRAY);
+	    Rectangle2D rect = new Rectangle2D.Double(-recWidth / 2, -ascent - 5, recWidth, ascent + descent + 10);
+	    bounds = new Rectangle2D.Double(getPos().x - (recWidth / 2), getPos().y - ascent - 5, recWidth, ascent + descent + 10);
 	    
-	    g2.fillRect((int)(-recWidth / 2), (int)-ascent-5, (int)recWidth, (int)(ascent + descent+10));
+	    g2.setPaint(Color.WHITE);
+	    
+	    g2.fill(rect);
 		
 	    g2.setPaint(Color.BLACK);
 	    
@@ -90,6 +98,10 @@ public class Entry extends Item {
 			g2.drawString(text, (int) (-width / 2), (int)0);
 		}
 
-	    
+	}
+	
+	@Override
+	public Rectangle2D getBounds() {
+		return bounds;
 	}
 }

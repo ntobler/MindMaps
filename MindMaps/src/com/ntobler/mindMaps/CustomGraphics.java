@@ -1,6 +1,5 @@
 package com.ntobler.mindMaps;
 
-import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Shape;

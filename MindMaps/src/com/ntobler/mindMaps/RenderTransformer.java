@@ -11,8 +11,7 @@ public class RenderTransformer {
 	private int zoomTicks = 0;
 	private double zoom = 1;
 	
-	public RenderTransformer (Dimension screenDimension) {
-		this.screenDimension = screenDimension;
+	public RenderTransformer () {
 	}
 	
 	public AffineTransform getTransformation() {
@@ -21,10 +20,9 @@ public class RenderTransformer {
 		
 		AffineTransform transform = new AffineTransform();
 		
-		if (t != null) {
-	        transform.translate(t.x, t.y);
-	        transform.scale(zoom, zoom);
-		}
+	    transform.translate(t.x, t.y);
+
+		transform.scale(zoom, zoom);
 		
 		return transform;
 	}
@@ -33,10 +31,13 @@ public class RenderTransformer {
 		
 		Complex centerVector = new Complex (screenDimension.getWidth() / 2, screenDimension.getHeight() / 2);
 	
-		Complex transformVector = null;
+		Complex transformVector;
 		
 		if (focus != null) {
 			transformVector = centerVector.minus(focus.getPos().scalarMultiply(zoom));
+		}
+		else {
+			transformVector = centerVector;
 		}
 		
 		return transformVector;
@@ -46,12 +47,8 @@ public class RenderTransformer {
 		
 		Complex gamePos;
 		
-		if (focus != null) {
-			gamePos =  mousePos.minus(getTransformVector()).scalarDivide(zoom);
-		}
-		else {
-			gamePos = mousePos;
-		}
+		gamePos =  mousePos.minus(getTransformVector()).scalarDivide(zoom);
+
 		return gamePos;
 	}
 	
@@ -59,12 +56,7 @@ public class RenderTransformer {
 		
 		Complex screenPos;
 		
-		if (focus != null) {
-			screenPos =  gamePos.scalarMultiply(zoom).plus(getTransformVector());
-		}
-		else {
-			screenPos = gamePos;
-		}
+		screenPos =  gamePos.scalarMultiply(zoom).plus(getTransformVector());
 		
 		return screenPos;
 	}

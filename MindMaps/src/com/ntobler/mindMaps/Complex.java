@@ -1,7 +1,8 @@
 package com.ntobler.mindMaps;
 
+import java.io.Serializable;
 
-public class Complex {
+public class Complex implements Serializable{
 
 	public static final Complex ZERO = new Complex(0, 0);
 	
