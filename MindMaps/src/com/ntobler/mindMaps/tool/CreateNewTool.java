@@ -39,4 +39,9 @@ public class CreateNewTool implements Tool {
 		
 	}
 
+	@Override
+	public String getToolString() {
+		return "Add new: Click to add";
+	}
+
 }

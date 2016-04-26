@@ -19,6 +19,7 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -50,7 +51,7 @@ public class MindMaps {
 	private static JMenuBar menuBar;
 	private static JMenu menu;
 	
-	private static JTextField textField;
+	private static JLabel toolLabel;
 	
 	public static void main(String [] args) {
 		
@@ -60,45 +61,26 @@ public class MindMaps {
         displayRender.addDrawingLayer(DrawingLayer.ITEMS);
         
         printRender = new Render();
-        printRender.addDrawingLayer(DrawingLayer.AREAS);
         printRender.addDrawingLayer(DrawingLayer.CONNECTIONS);
         printRender.addDrawingLayer(DrawingLayer.ITEMS);
         
         
         transformer = new RenderTransformer();
-		display = new Display(displayRender,transformer);
 		
-		transformer.setScreenDimension(display.getSize());
 		
 		
 		gui = GUI.getInstance();
-		
 		gui.setJMenuBar(setupMenuBar());
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
+	    gui.add(panel);
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
+		display = new Display(displayRender,transformer);
+		panel.add(display);
 		
-        panel.add(display);
-        
-        textField = new JTextField();
-        textField.setText("hellol");
-        
-        /*textField.addKeyListener(new KeyAdapter()
-        {
-            public void keyPressed(KeyEvent e)
-            {
-            	//this section will execute only when user is editing the JTextField
-                if(!(e.getKeyChar() == 27 || e.getKeyChar() == 65535)) {
-                	entryPlacer.setText(textField.getText());
-                }
-            }
-        });*/
-        textField.requestFocus();
-        panel.add(textField);
-        
-		gui.add(panel);
+		toolLabel = new JLabel();
+		panel.add(toolLabel);
 		
 		workspace = new Workspace(transformer);
 		toolHandler = new ToolHandler();
@@ -114,18 +96,9 @@ public class MindMaps {
 		printArea.setOrigin(new Point2D.Double(210, 297));
 		displayRender.addPaintable(printArea);
 		
-		
-		
-		gui.addComponentListener(new ComponentAdapter() 
-		{  
-		        public void componentResized(ComponentEvent evt) {
-		            Component c = (Component)evt.getSource();
-		            //render.setSize(c.getSize());
-		        }
-		});
-		
 		setupMouseListeners();
 		
+		transformer.setScreenDimension(display.getSize());
 		onSomethingChanged();
 	}
 	
@@ -211,18 +184,15 @@ public class MindMaps {
 			public void keyPressed(KeyEvent arg0) {
 
 				toolHandler.keyPressed(arg0);
+				toolLabel.setText(toolHandler.getToolString());
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		});
@@ -247,6 +217,7 @@ public class MindMaps {
 				Point2D pick = new Point2D.Double(pos.x, pos.y);
 				
 				toolHandler.pick(pick, arg0, workspace);
+				toolLabel.setText(toolHandler.getToolString());
 				
 				if (arg0.isShiftDown()) {
 					printArea.setOrigin(pick);
@@ -254,41 +225,23 @@ public class MindMaps {
 				else if (arg0.isAltDown()) {
 					printArea.setDest(pick);
 				}
-				/*else if (arg0.isControlDown()) {
-					Item i = workspace.getPickedItem(pick);
-					if (i != null) {
-						entryPlacer.setParent((Entry)i);
-					}
-				}
-				else {
-					entryPlacer.pick(pos);
-				}*/
 				onSomethingChanged();
-				
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
-
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-
-				
 			}
 
 

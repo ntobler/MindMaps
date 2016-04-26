@@ -46,6 +46,10 @@ public class ToolHandler {
 		activeTool.pick(pos, e, w);
 	}
 	
+	public String getToolString() {
+		return activeTool.getToolString();
+	}
+	
 	
 	
 }

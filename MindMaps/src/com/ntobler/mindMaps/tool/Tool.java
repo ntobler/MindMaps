@@ -11,5 +11,6 @@ public interface Tool {
 	public void pick(Point2D pos, MouseEvent e, Workspace w);
 	public int getShortcutKey();
 	public void abort();
+	public String getToolString();
 	
 }

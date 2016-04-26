@@ -31,32 +31,20 @@ public class GUI extends JFrame {
 		
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
-		
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new GUIDispatcher());
         
+        initComponents();
         
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
         
-        label = new JLabel("Label");
-		
-		button = new JButton("Button");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			    button.setText(e.toString());
-			  }
-		});
-		
-		panel.add(label);
-		panel.add(button);
-		
-		
-		//add(panel);
 		setSize(500,500);
 		setVisible(true);
 		
-		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		//setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+	}
+	
+	private void initComponents() {
+		
 	}
 	
 	private class GUIDispatcher implements KeyEventDispatcher {

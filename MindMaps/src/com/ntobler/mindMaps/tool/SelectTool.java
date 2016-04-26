@@ -59,4 +59,18 @@ public class SelectTool implements Tool {
 		
 	}
 
+	@Override
+	public String getToolString() {
+		
+		String toolString = "Select: ";
+		
+		if (draging) {
+			toolString += "Moving.. Click to place";
+		}
+		else {
+			toolString += "Click to move, double click to edit";
+		}
+		return toolString;
+	}
+
 }
